@@ -18,7 +18,7 @@ let mins = 0;
 let secs = 0;
 
 
-startBtn.addEventListener("click", function(){
+ function start(){
 	if(paused)
 	{
 		paused = false;
@@ -30,9 +30,9 @@ startBtn.addEventListener("click", function(){
 		
 		pauseBtn.textContent = "pause";
 	}
-});
+};
 
-pauseBtn.addEventListener("click", function(){
+function pause(){
 	if(!paused)
 	{
 		paused = true;
@@ -41,9 +41,9 @@ pauseBtn.addEventListener("click", function(){
 		pauseBtn.textContent = "continue";
 		startBtn.disabled = false;
 	}
-});
+};
 
-stopBtn.addEventListener("click", function(){
+ function stop(){
 	paused = true;
 	clearInterval(intervalId);
 	startTime = 0;
@@ -57,7 +57,7 @@ stopBtn.addEventListener("click", function(){
 	stopBtn.disabled = true;
 	startBtn.disabled = false;
 	
-});
+};
 
 function updateTime(){
 	elapsedTime = Date.now() - startTime;
