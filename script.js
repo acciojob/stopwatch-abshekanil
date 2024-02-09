@@ -1,91 +1,53 @@
-//your code here
-let timeDisplay = document.getElementById("time");
-let startBtn = document.getElementById("start");
-let pauseBtn = document.getElementById("pause");
-let stopBtn = document.getElementById("stop");
-
-pauseBtn.disabled = true;
-stopBtn.disabled = true;
-startBtn.disabled = false;
-
-let startTime = 0;
-let elapsedTime = 0;
-let currentTime = 0;
-let paused = true;
-let intervalId;
-let hrs = 0;
-let mins = 0;
-let secs = 0;
-
-
- function start(){
-	if(paused)
-	{
-		paused = false;
-		startTime = Date.now() - elapsedTime;
-		intervalId = setInterval(updateTime, 1000);
-		pauseBtn.disabled = false;
-		stopBtn.disabled = false;
-		startBtn.disabled = true;
-		
-		pauseBtn.textContent = "pause";
-	}
-};
-
-function pause(){
-	if(!paused)
-	{
-		paused = true;
-		elapsedTime = Date.now() - startTime;
-		clearInterval(intervalId);
-		pauseBtn.textContent = "continue";
-		
-	}
-	else
-	{
-		paused = false;
-		startTime = Date.now() - elapsedTime;
-		intervalId = setInterval(updateTime, 1000);
-		pauseBtn.disabled = false;
-		stopBtn.disabled = false;
-		startBtn.disabled = true;
-		
-		pauseBtn.textContent = "pause";
-		
-	}
-};
-
- function stop(){
-	paused = true;
-	clearInterval(intervalId);
-	startTime = 0;
-    elapsedTime = 0;
-    currentTime = 0;
-	hrs = 0;
-	mins = 0;
-	secs = 0;
-	timeDisplay.textContent = "00:00:00";
-	pauseBtn.disabled = true;
-	stopBtn.disabled = true;
-	startBtn.disabled = false;
-	
-};
-
-function updateTime(){
-	elapsedTime = Date.now() - startTime;
-	secs = Math.floor((elapsedTime / 1000) % 60 );
-	mins = Math.floor((elapsedTime / (1000 * 60)) % 60);
-	hrs = Math.floor((elapsedTime / (1000 * 60 * 60)) % 60 );
- 
-	
-	secs = pad(secs);
-	mins = pad(mins);
-	hrs = pad(hrs);
-	
-	timeDisplay.textContent = `${hrs}:${mins}:${secs}`;
+function setTime() {
+    timerDiv.innerText = (parseInt(time / 3600) < 10 ? "0" : "") + parseInt(time / 3600) + ":" + (parseInt((time / 60) % 60) < 10 ? "0" : "") + parseInt((time / 60) % 60) + ":" + (parseInt((time) % 60) < 10 ? "0" : "") + parseInt((time) % 60)
 }
 
-function pad(unit){
-	return(("0")+ unit).length > 2 ? unit : "0" + unit;
+
+function start() {
+    if (!timerOn) {
+        timerId = setInterval(() => {
+            time = time + 0.1;
+            setTime();
+        }, 100);
+        document.getElementById('start').setAttribute('disabled', true)
+        document.getElementById('stop').removeAttribute('disabled')
+        document.getElementById('pause').removeAttribute('disabled')
+
+
+        timerOn = true;
+    }
+}
+function stop() {
+    document.getElementById('start').removeAttribute('disabled')
+    document.getElementById('pause').setAttribute('disabled', true)
+    document.getElementById('pause').innerText = "pause"
+    document.getElementById('stop').setAttribute('disabled', true)
+    clearInterval(timerId)
+    time = 0;
+    setTime();
+    timerOn = false;
 }
 
+
+
+
+function pause() {
+
+
+    if (timerOn) {
+        clearInterval(timerId)
+        timerOn = false;
+        document.getElementById('pause').innerText = "continue"
+    }
+    else {
+        document.getElementById('pause').innerText = "pause"
+        start()
+    }
+}
+let time = 0;
+let timerOn = false;
+let timerDiv = document.getElementById('time')
+document.getElementById('pause').setAttribute('disabled', true)
+document.getElementById('stop').setAttribute('disabled', true)
+setTime()
+let timerId;
