@@ -39,7 +39,19 @@ function pause(){
 		elapsedTime = Date.now() - startTime;
 		clearInterval(intervalId);
 		pauseBtn.textContent = "continue";
-		startBtn.disabled = false;
+		
+	}
+	else
+	{
+		paused = false;
+		startTime = Date.now() - elapsedTime;
+		intervalId = setInterval(updateTime, 1000);
+		pauseBtn.disabled = false;
+		stopBtn.disabled = false;
+		startBtn.disabled = true;
+		
+		pauseBtn.textContent = "pause";
+		
 	}
 };
 
